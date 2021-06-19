@@ -6,6 +6,7 @@ export const Configuration = {
       username: process.env.API_DB_USERNAME,
       password: process.env.API_DB_PASSWORD,
       database: process.env.API_DB_DATABASE,
+      logging: process.env.API_DB_LOGGING === 'true',
     },
   },
 };

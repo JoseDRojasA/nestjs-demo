@@ -1,20 +1,25 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
 import { ProductMovementsModule } from '../src/product-movements.module';
 import { ProductMovementDTO } from '../src/dto/product-movement.dto';
+
+import * as request from 'supertest';
 import * as Faker from 'faker';
+import { KnexCleanerService } from '@app/common/testing/knex-cleaner.service';
 
 describe('ProductMovementsController (e2e)', () => {
   let app: INestApplication;
+  let knexCleanerService: KnexCleanerService;
   let response;
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [ProductMovementsModule],
+      providers: [KnexCleanerService],
     }).compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
+    knexCleanerService = app.get<KnexCleanerService>(KnexCleanerService);
   });
 
   describe('(POST) /registrar-compra', () => {
@@ -37,6 +42,10 @@ describe('ProductMovementsController (e2e)', () => {
         expect(response.statusCode).toBe(201);
       });
     });
+  });
+
+  afterEach(async () => {
+    await knexCleanerService.cleanDB();
   });
 
   afterAll(async () => {

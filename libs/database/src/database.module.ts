@@ -3,7 +3,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 export * as repositories from './repositories';
-const { host, port, username, password, database } = Configuration.api.db;
+
+const { host, port, username, password, database, logging } =
+  Configuration.api.db;
 
 @Module({
   imports: [
@@ -16,7 +18,7 @@ const { host, port, username, password, database } = Configuration.api.db;
       password,
       database,
       synchronize: false,
-      logging: true,
+      logging,
       entities: [join(__dirname, 'entities', '*.ts')],
     }),
   ],
