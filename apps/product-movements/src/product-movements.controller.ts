@@ -1,12 +1,18 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { ProductMovementDTO } from './dto/product-movement.dto';
 import { ProductMovementsService } from './product-movements.service';
 
 @Controller()
 export class ProductMovementsController {
-  constructor(private readonly productMovementsService: ProductMovementsService) {}
+  constructor(private readonly service: ProductMovementsService) {}
 
   @Get()
-  getHello(): string {
-    return this.productMovementsService.getHello();
+  healthCheck(): string {
+    return;
+  }
+
+  @Post('/registrar-compra')
+  savePurchase(@Body() body: ProductMovementDTO) {
+    return this.service.savePurchase(body);
   }
 }

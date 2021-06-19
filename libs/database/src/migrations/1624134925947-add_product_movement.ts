@@ -23,8 +23,7 @@ export class addProductMovement1624134925947 implements MigrationInterface {
       columns: [
         {
           name: 'id',
-          type: 'int',
-          isGenerated: true,
+          type: 'varchar',
           isPrimary: true,
         },
         {
