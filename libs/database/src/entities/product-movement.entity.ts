@@ -9,17 +9,14 @@ import {
 import { Product } from './product.entity';
 
 @Entity()
-export class Purchase {
+export class ProductMovement {
   @PrimaryColumn()
   id: string;
-
-  @Column({ nullable: false })
-  name: string;
 
   @Column({ name: 'product_id', default: 0 })
   productId: string;
 
-  @Column({ default: 0 })
+  @Column({ nullable: false })
   amount: number;
 
   @CreateDateColumn({ name: 'created_at', default: () => 'now()' })
@@ -28,7 +25,7 @@ export class Purchase {
   @CreateDateColumn({ name: 'updated_at', default: () => 'now()' })
   updatedAt: Date;
 
-  @ManyToOne(() => Product, (product: Product) => product.purchases)
+  @ManyToOne(() => Product, (product: Product) => product.movements)
   @JoinColumn([{ name: 'product_id', referencedColumnName: 'id' }])
   product: Product;
 }
