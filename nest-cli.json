@@ -1,6 +1,6 @@
 {
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
+  "sourceRoot": "apps/inventory/src",
   "projects": {
     "database": {
       "type": "library",
@@ -19,9 +19,30 @@
       "compilerOptions": {
         "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
+    },
+    "inventory": {
+      "type": "application",
+      "root": "apps/inventory",
+      "entryFile": "main",
+      "sourceRoot": "apps/inventory/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/inventory/tsconfig.app.json"
+      }
+    },
+    "product-movements": {
+      "type": "application",
+      "root": "apps/product-movements",
+      "entryFile": "main",
+      "sourceRoot": "apps/product-movements/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/product-movements/tsconfig.app.json"
+      }
     }
   },
   "compilerOptions": {
-    "webpack": true
-  }
+    "webpack": true,
+    "tsConfigPath": "apps/inventory/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/inventory"
 }
