@@ -19,7 +19,7 @@ export class addSale1624132387685 implements MigrationInterface {
           isPrimary: true,
         },
         {
-          name: 'name',
+          name: 'amount',
           type: 'int',
           isNullable: false,
         },
