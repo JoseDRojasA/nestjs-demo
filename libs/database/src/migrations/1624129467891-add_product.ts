@@ -9,8 +9,7 @@ export class addProduct1624129467891 implements MigrationInterface {
       columns: [
         {
           name: 'id',
-          type: 'int',
-          isGenerated: true,
+          type: 'varchar',
           isPrimary: true,
         },
         {
@@ -25,12 +24,12 @@ export class addProduct1624129467891 implements MigrationInterface {
         },
         {
           name: 'created_at',
-          type: 'typestamp',
+          type: 'timestamp without time zone',
           default: 'now()',
         },
         {
           name: 'updated_at',
-          type: 'typestamp',
+          type: 'timestamp without time zone',
           default: 'now()',
         },
       ],

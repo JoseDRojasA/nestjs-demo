@@ -9,7 +9,7 @@
     "database": "inventory",
     "entities": ["libs/database/src/entities/*.ts"],
     "synchronize": false,
-    "migrations": ["migrations/*{.ts}"],
+    "migrations": ["libs/database/src/migrations/*.ts"],
     "migrationsTableName": "migrations",
     "migrationsRun": true,
     "cli": {

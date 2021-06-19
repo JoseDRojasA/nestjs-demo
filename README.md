@@ -5,3 +5,6 @@
 
 # Start project
 `yarn start`
+
+# Create migration
+`yarn typeorm migration:create -n <name>`
