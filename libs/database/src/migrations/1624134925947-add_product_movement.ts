@@ -6,7 +6,7 @@ import {
   TableForeignKey,
 } from 'typeorm';
 
-const PRODUCT_MOVEMENT_TABLE_NAME = 'purchase';
+const PRODUCT_MOVEMENT_TABLE_NAME = 'product_movement';
 
 const amountColumn = new TableColumn({
   name: 'amount',
