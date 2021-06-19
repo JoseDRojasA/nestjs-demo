@@ -20,7 +20,8 @@ export class ProductMovementsService {
     await queryRunner.connect();
     await queryRunner.startTransaction();
     try {
-      const productMovement = productMovementDTO.toProductMovement();
+      const productMovement =
+        ProductMovementDTO.toProductMovement(productMovementDTO);
       const productRepository =
         queryRunner.connection.getCustomRepository(ProductRepository);
       const productMovementRepository =

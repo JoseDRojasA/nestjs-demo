@@ -1,0 +1,3 @@
+{
+  "jest.jestCommandLine": "${workspaceFolder}\\node_modules\\.bin\\jest"
+}

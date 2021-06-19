@@ -6,13 +6,13 @@ export class ProductMovementDTO {
   idProducto: string;
   nombreProducto: string;
 
-  toProductMovement() {
+  static toProductMovement(productMovementDTO: ProductMovementDTO) {
     const productMovement = new ProductMovement();
-    productMovement.amount = this.cantidad;
-    productMovement.id = this.id;
+    productMovement.amount = productMovementDTO.cantidad;
+    productMovement.id = productMovementDTO.id;
     productMovement.product = new Product();
-    productMovement.product.id = this.idProducto;
-    productMovement.product.name = this.nombreProducto;
+    productMovement.product.id = productMovementDTO.idProducto;
+    productMovement.product.name = productMovementDTO.nombreProducto;
     return productMovement;
   }
 

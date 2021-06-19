@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { ProductMovementsModule } from './../src/product-movements.module';
+import { ProductMovementsModule } from '../src/product-movements.module';
 import { ProductMovementDTO } from '../src/dto/product-movement.dto';
-import Faker from 'faker';
+import * as Faker from 'faker';
 
 describe('ProductMovementsController (e2e)', () => {
   let app: INestApplication;
@@ -26,15 +26,15 @@ describe('ProductMovementsController (e2e)', () => {
       beforeEach(async () => {
         payload = {
           id: Faker.lorem.word(10),
-          cantidad: Number(Faker.finance.amount(1, 10)),
+          cantidad: Number(Faker.finance.amount(1, 10, 0)),
           idProducto: Faker.lorem.word(10),
           nombreProducto: Faker.commerce.productName(),
         };
         response = await sendRequest(payload);
       });
 
-      it('should return 200', () => {
-        response.expect(200);
+      it('should return 201', () => {
+        expect(response.statusCode).toBe(201);
       });
     });
   });
