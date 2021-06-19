@@ -1,0 +1,19 @@
+[
+  {
+    "name": "default",
+    "type": "postgres",
+    "host": "localhost",
+    "port": 5432,
+    "username": "root",
+    "password": "root",
+    "database": "inventory",
+    "entities": ["libs/database/src/entities/*.ts"],
+    "synchronize": false,
+    "migrations": ["migrations/*{.ts}"],
+    "migrationsTableName": "migrations",
+    "migrationsRun": true,
+    "cli": {
+      "migrationsDir": "migrations"
+    }
+  }
+]
