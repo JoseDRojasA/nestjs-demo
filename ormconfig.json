@@ -12,6 +12,7 @@
     "migrations": ["libs/database/src/migrations/*.ts"],
     "migrationsTableName": "migrations",
     "migrationsRun": true,
+    "factories": ["libs/database/src/factories/*.ts"],
     "cli": {
       "migrationsDir": "libs/database/src/migrations"
     }
