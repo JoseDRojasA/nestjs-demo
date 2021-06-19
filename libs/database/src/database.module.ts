@@ -1,7 +1,6 @@
 import { CommonModule, Configuration } from '@app/common';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DatabaseService } from './database.service';
 
 const { host, port, username, password, database } = Configuration.api.db;
 
@@ -18,7 +17,5 @@ const { host, port, username, password, database } = Configuration.api.db;
       synchronize: false,
     }),
   ],
-  providers: [DatabaseService],
-  exports: [DatabaseService],
 })
 export class DatabaseModule {}
