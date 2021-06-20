@@ -44,20 +44,27 @@ describe('ProductMovementsController (e2e)', () => {
     let payload: Partial<ProductMovementDTO>;
     let productsCountBefore: number;
     let productMovementCountBefore: number;
+    let inventoryBefore: number;
+    let productId: string;
+    const amount = Number(Faker.finance.amount(1, 10, 0));
 
     const sendRequest = (payload: Partial<ProductMovementDTO>) =>
       request(app.getHttpServer()).post('/registrar-compra').send(payload);
 
     describe('when the product is not created', () => {
       beforeEach(async () => {
+        productId = Faker.lorem.word(10);
         payload = {
           id: Faker.lorem.word(10),
-          cantidad: Number(Faker.finance.amount(1, 10, 0)),
-          idProducto: Faker.lorem.word(10),
+          cantidad: amount,
+          idProducto: productId,
           nombreProducto: Faker.commerce.productName(),
         };
         productsCountBefore = await productRepository.count();
         productMovementCountBefore = await productMovementRepository.count();
+        inventoryBefore = await productMovementRepository.getInventory(
+          productId,
+        );
         response = await sendRequest(payload);
       });
 
@@ -74,20 +81,31 @@ describe('ProductMovementsController (e2e)', () => {
         const productMovementsCountAfter = await productRepository.count();
         expect(productMovementsCountAfter - productMovementCountBefore).toBe(1);
       });
+
+      it('should increase inventory', async () => {
+        const inventoryAfter = await productMovementRepository.getInventory(
+          productId,
+        );
+        expect(inventoryAfter - inventoryBefore).toBe(amount);
+      });
     });
 
     describe('when the product is already created', () => {
       let product: Product;
       beforeEach(async () => {
         product = await factory(Product)().create();
+        productId = product.id;
         payload = {
           id: Faker.lorem.word(10),
           cantidad: Number(Faker.finance.amount(1, 10, 0)),
-          idProducto: product.id,
+          idProducto: productId,
           nombreProducto: product.name,
         };
         productsCountBefore = await productRepository.count();
         productMovementCountBefore = await productMovementRepository.count();
+        inventoryBefore = await productMovementRepository.getInventory(
+          productId,
+        );
         response = await sendRequest(payload);
       });
 
@@ -103,6 +121,13 @@ describe('ProductMovementsController (e2e)', () => {
       it('should create a new product movement in the db', async () => {
         const productMovementsCountAfter = await productRepository.count();
         expect(productMovementsCountAfter - productMovementCountBefore).toBe(1);
+      });
+
+      it('should increase inventory', async () => {
+        const inventoryAfter = await productMovementRepository.getInventory(
+          productId,
+        );
+        expect(inventoryAfter - inventoryBefore).toBe(amount);
       });
     });
   });

@@ -47,6 +47,54 @@ export class ProductMovementsService {
     return purchase;
   }
 
+  async saveSell(
+    productMovementDTO: ProductMovementDTO,
+  ): Promise<ProductMovementDTO> {
+    let purchase: ProductMovementDTO;
+    const queryRunner = this.connection.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const productMovement =
+        ProductMovementDTO.toProductMovement(productMovementDTO);
+      const productRepository =
+        queryRunner.connection.getCustomRepository(ProductRepository);
+      const productMovementRepository =
+        queryRunner.connection.getCustomRepository(ProductMovementRepository);
+      const product = await productRepository.save(productMovement.product);
+
+      await this.validateAmount(
+        product.id,
+        productMovement.amount,
+        productMovementRepository,
+      );
+      productMovement.amount = -1 * productMovement.amount;
+      await productMovementRepository.save(productMovement);
+      await queryRunner.commitTransaction();
+
+      purchase = ProductMovementDTO.fromProductMovement(productMovement);
+    } catch (e) {
+      await queryRunner.rollbackTransaction();
+      throw e;
+    } finally {
+      await queryRunner.release();
+    }
+    return purchase;
+  }
+
+  async validateAmount(
+    productId: string,
+    productMovementAmount: number,
+    productMovementRepository: ProductMovementRepository,
+  ) {
+    const inventoryAmount = await productMovementRepository.getInventory(
+      productId,
+    );
+    if (inventoryAmount < productMovementAmount) {
+      throw new ForbiddenException(`You don't have enough inventory`);
+    }
+  }
+
   async validateMonthlyPurchases(
     productId: string,
     productMovementAmount: number,

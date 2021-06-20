@@ -1,5 +1,8 @@
 import { DatabaseModule } from '@app/database';
-import { Product, ProductMovement } from '@app/database/entities';
+import {
+  ProductMovementRepository,
+  ProductRepository,
+} from '@app/database/repositories';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductMovementsController } from './product-movements.controller';
@@ -8,7 +11,7 @@ import { ProductMovementsService } from './product-movements.service';
 @Module({
   imports: [
     DatabaseModule,
-    TypeOrmModule.forFeature([Product, ProductMovement]),
+    TypeOrmModule.forFeature([ProductRepository, ProductMovementRepository]),
   ],
   controllers: [ProductMovementsController],
   providers: [ProductMovementsService],

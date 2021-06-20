@@ -15,4 +15,9 @@ export class ProductMovementsController {
   savePurchase(@Body() body: ProductMovementDTO) {
     return this.service.savePurchase(body);
   }
+
+  @Post('/registrar-venta')
+  saveSell(@Body() body: ProductMovementDTO) {
+    return this.service.saveSell(body);
+  }
 }
