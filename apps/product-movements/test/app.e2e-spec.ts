@@ -115,7 +115,7 @@ describe('ProductMovementsController (e2e)', () => {
 
       it('should not create a new product in the db', async () => {
         const productsCountAfter = await productRepository.count();
-        expect(productsCountAfter - productsCountBefore).toBe(0);
+        expect(productsCountAfter).toBe(productsCountBefore);
       });
 
       it('should create a new product movement in the db', async () => {
@@ -159,7 +159,7 @@ describe('ProductMovementsController (e2e)', () => {
         const inventoryAfter = await productMovementRepository.getInventory(
           productId,
         );
-        expect(inventoryAfter - inventoryBefore).toBe(0);
+        expect(inventoryAfter).toBe(inventoryBefore);
       });
     });
 
@@ -191,7 +191,92 @@ describe('ProductMovementsController (e2e)', () => {
         const inventoryAfter = await productMovementRepository.getInventory(
           productId,
         );
-        expect(inventoryAfter - inventoryBefore).toBe(0);
+        expect(inventoryAfter).toBe(inventoryBefore);
+      });
+    });
+  });
+
+  describe('(POST) /registrar-venta', () => {
+    let payload: Partial<ProductMovementDTO>;
+    let productsCountBefore: number;
+    let productMovementCountBefore: number;
+    let inventoryBefore: number;
+    let productId: string;
+    let product: Product;
+    const amount = Number(Faker.finance.amount(1, 10, 0));
+
+    const sendRequest = (payload: Partial<ProductMovementDTO>) =>
+      request(app.getHttpServer()).post('/registrar-venta').send(payload);
+
+    describe('when there are not stock available', () => {
+      beforeEach(async () => {
+        productId = Faker.lorem.word(10);
+        payload = {
+          id: Faker.lorem.word(10),
+          cantidad: amount,
+          idProducto: productId,
+          nombreProducto: Faker.commerce.productName(),
+        };
+        productsCountBefore = await productRepository.count();
+        productMovementCountBefore = await productMovementRepository.count();
+        inventoryBefore = await productMovementRepository.getInventory(
+          productId,
+        );
+        response = await sendRequest(payload);
+      });
+
+      it('should return 403', () => {
+        expect(response.statusCode).toBe(403);
+      });
+
+      it('should not create a new product in the db', async () => {
+        const productsCountAfter = await productRepository.count();
+        expect(productsCountAfter).toBe(productsCountBefore);
+      });
+
+      it('should not create a new product movement in the db', async () => {
+        const productMovementsCountAfter = await productRepository.count();
+        expect(productMovementsCountAfter).toBe(productMovementCountBefore);
+      });
+
+      it('should not increase inventory', async () => {
+        const inventoryAfter = await productMovementRepository.getInventory(
+          productId,
+        );
+        expect(inventoryAfter).toBe(inventoryBefore);
+      });
+    });
+
+    describe('when there are stock available', () => {
+      const decreaseAmount = Number(Faker.finance.amount(1, 10, 0));
+      beforeEach(async () => {
+        product = await factory(Product)().create();
+        productId = product.id;
+        await factory(ProductMovement)({
+          productId,
+          amount: Number(Faker.finance.amount(31, 40, 0)),
+        }).create();
+        inventoryBefore = await productMovementRepository.getInventory(
+          productId,
+        );
+        payload = {
+          id: Faker.lorem.word(10),
+          cantidad: decreaseAmount,
+          idProducto: productId,
+          nombreProducto: product.name,
+        };
+        response = await sendRequest(payload);
+      });
+
+      it('should return 201', () => {
+        expect(response.statusCode).toBe(201);
+      });
+
+      it('should decrease inventory', async () => {
+        const inventoryAfter = await productMovementRepository.getInventory(
+          productId,
+        );
+        expect(inventoryBefore - inventoryAfter).toBe(decreaseAmount);
       });
     });
   });

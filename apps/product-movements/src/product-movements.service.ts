@@ -61,14 +61,16 @@ export class ProductMovementsService {
         queryRunner.connection.getCustomRepository(ProductRepository);
       const productMovementRepository =
         queryRunner.connection.getCustomRepository(ProductMovementRepository);
-      const product = await productRepository.save(productMovement.product);
 
       await this.validateAmount(
-        product.id,
+        productMovement.product.id,
         productMovement.amount,
         productMovementRepository,
       );
+
       productMovement.amount = -1 * productMovement.amount;
+
+      await productRepository.save(productMovement.product);
       await productMovementRepository.save(productMovement);
       await queryRunner.commitTransaction();
 
@@ -82,7 +84,7 @@ export class ProductMovementsService {
     return purchase;
   }
 
-  async validateAmount(
+  private async validateAmount(
     productId: string,
     productMovementAmount: number,
     productMovementRepository: ProductMovementRepository,
@@ -95,7 +97,7 @@ export class ProductMovementsService {
     }
   }
 
-  async validateMonthlyPurchases(
+  private async validateMonthlyPurchases(
     productId: string,
     productMovementAmount: number,
     productMovementRepository: ProductMovementRepository,
