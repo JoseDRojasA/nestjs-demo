@@ -14,3 +14,16 @@ The app architecture is based on Nestjs repository pattern.
 - **Entity**: Class that maps to a database table [More information](https://github.com/typeorm/typeorm/blob/master/docs/entities.md)
 - **Migration**: File that describes how the database change. [More information](https://github.com/typeorm/typeorm/blob/master/docs/migrations.md)
 - **Factory**: Class that creates records of an entity in the database. [More information](https://github.com/w3tecch/typeorm-seeding#-using-entity-factory)
+
+## Technologies
+- Nestjs (Expressjs)
+- Typeorm
+- Typeorm-seeding
+- Postgres
+- Jest
+- Husky
+- Prettier
+- Eslint
+- Github Actions
+- Docker/Docker-compose
+- AWS (S3, RDS, ECS, Route53, Certificate Manager)
