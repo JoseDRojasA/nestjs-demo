@@ -1,0 +1,50 @@
+name: Execute tests
+on:
+  push:
+    tags:
+      - '*'
+    branches: ['dev']
+jobs:
+  Execute-tests:
+    runs-on: ubuntu-20.04
+  
+    services:
+      postgres:
+        image: postgres:12
+        ports:
+          - 5432
+        env:
+          POSTGRES_PASSWORD: root
+          POSTGRES_USER: root
+          POSTGRES_DB: inventory
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Setup node 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+    
+      - name: Install dependencies
+        run: yarn
+      
+      - name: Configure env file
+        run: |
+          cp .env.example .env
+          sed -i 's/5432/${{ env.API_DB_PORT }}/' .env
+          sed -i 's/5432/${{ env.API_DB_PORT }}/' ormconfig.js
+        env:
+          API_DB_PORT: ${{ job.services.postgres.ports[5432] }}
+
+      - name: Execute migrations
+        run: yarn migrate
+
+      - name: Execute tests
+        run: yarn test:e2e

@@ -8,6 +8,8 @@
 
 You can access to swagger documentation in the url: http://localhost:3000/api/
 
+You can access to the docker image in the url: https://hub.docker.com/repository/docker/josedrojasa/nestjs-demo
+
 # Concepts
 - **App**: Application. [More information](https://docs.nestjs.com/cli/monorepo#monorepo-mode)
 - **Library**: Code that can be shared between multiple apps. [More information](https://docs.nestjs.com/cli/libraries)
