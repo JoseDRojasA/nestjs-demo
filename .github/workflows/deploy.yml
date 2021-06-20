@@ -32,34 +32,32 @@ jobs:
           push: true
           tags: josedrojasa/nestjs-demo:${{ github.sha }}
   
-  Deploy in ECS:
-    runs-on: ubuntu-20.04
-      steps:
-        - name: Configure AWS credentials
-          uses: aws-actions/configure-aws-credentials@v1
-          with:
-            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-            aws-region: us-east-2
+      # Deploy in AWS
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-2
 
-        - name: Download task definition
-          run: |
-            apt update
-            apt install awscli
-            aws ecs describe-task-definition --task-definition demo-nest --query taskDefinition > task-definition.json
-    
-        - name: Fill in the new image ID in the Amazon ECS task definition
-          id: task-def
-          uses: aws-actions/amazon-ecs-render-task-definition@v1
-          with:
-            task-definition: task-definition.json
-            container-name: api-demo
-            image: josedrojasa/nestjs-demo:${{ github.sha }}
+      - name: Download task definition
+        run: |
+          apt update
+          apt install awscli
+          aws ecs describe-task-definition --task-definition demo-nest --query taskDefinition > task-definition.json
+  
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: task-definition.json
+          container-name: api-demo
+          image: josedrojasa/nestjs-demo:${{ github.sha }}
 
-        - name: Deploy Amazon ECS task definition
-          uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-          with:
-            task-definition: ${{ steps.task-def.outputs.task-definition }}
-            service: demo-nest
-            cluster: demo
-            wait-for-service-stability: true
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: demo-nest
+          cluster: demo
+          wait-for-service-stability: true
