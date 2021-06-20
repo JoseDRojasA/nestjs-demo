@@ -10,6 +10,7 @@ const MAX_AMOUNT_OF_MONTHLY_PURCHASES = 30;
 
 @Injectable()
 export class ProductMovementsService {
+  // eslint-disable-next-line no-unused-vars
   constructor(private connection: Connection) {}
 
   async savePurchase(

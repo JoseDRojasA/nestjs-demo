@@ -5,6 +5,7 @@ import { ProductMovementsService } from './product-movements.service';
 
 @Controller()
 export class ProductMovementsController {
+  // eslint-disable-next-line no-unused-vars
   constructor(private readonly service: ProductMovementsService) {}
 
   @Get()

@@ -101,6 +101,7 @@
   },
   "lint-staged": {
     "*.ts": [
+      "yarn prettier",
       "yarn lint"
     ]
   },

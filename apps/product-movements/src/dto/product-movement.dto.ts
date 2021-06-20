@@ -50,6 +50,3 @@ export class ProductMovementDTO {
     return productMovementDTO;
   }
 }
-function ApiProperty() {
-  throw new Error('Function not implemented.');
-}
