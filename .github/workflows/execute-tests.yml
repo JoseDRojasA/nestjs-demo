@@ -1,5 +1,10 @@
-name: Execute testing
-on: [push]
+name: Execute tests
+on:
+  push:
+    tags:
+      - '*'
+    branches:
+      - '*'
 jobs:
   Execute-tests:
     runs-on: ubuntu-20.04
