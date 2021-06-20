@@ -3,7 +3,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ProductMovementDTO } from './dto/product-movement.dto';
 import { ProductMovementsService } from './product-movements.service';
 
-@ApiTags('product-movements')
+@ApiTags('Product movements')
 @Controller()
 export class ProductMovementsController {
   // eslint-disable-next-line no-unused-vars
