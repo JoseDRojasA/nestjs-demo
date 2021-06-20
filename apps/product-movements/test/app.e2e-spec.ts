@@ -10,7 +10,7 @@ import {
   ProductMovementRepository,
   ProductRepository,
 } from '@app/database/repositories';
-import { Product } from '@app/database/entities';
+import { Product, ProductMovement } from '@app/database/entities';
 import { factory, useSeeding, tearDownDatabase } from 'typeorm-seeding';
 
 describe('ProductMovementsController (e2e)', () => {
@@ -46,6 +46,7 @@ describe('ProductMovementsController (e2e)', () => {
     let productMovementCountBefore: number;
     let inventoryBefore: number;
     let productId: string;
+    let product: Product;
     const amount = Number(Faker.finance.amount(1, 10, 0));
 
     const sendRequest = (payload: Partial<ProductMovementDTO>) =>
@@ -91,13 +92,12 @@ describe('ProductMovementsController (e2e)', () => {
     });
 
     describe('when the product is already created', () => {
-      let product: Product;
       beforeEach(async () => {
         product = await factory(Product)().create();
         productId = product.id;
         payload = {
           id: Faker.lorem.word(10),
-          cantidad: Number(Faker.finance.amount(1, 10, 0)),
+          cantidad: amount,
           idProducto: productId,
           nombreProducto: product.name,
         };
@@ -128,6 +128,70 @@ describe('ProductMovementsController (e2e)', () => {
           productId,
         );
         expect(inventoryAfter - inventoryBefore).toBe(amount);
+      });
+    });
+
+    describe('when monthly purchase is more than 30', () => {
+      beforeEach(async () => {
+        product = await factory(Product)().create();
+        productId = product.id;
+        await factory(ProductMovement)({
+          productId,
+          amount: Number(Faker.finance.amount(31, 40, 0)),
+        }).create();
+        inventoryBefore = await productMovementRepository.getInventory(
+          productId,
+        );
+        payload = {
+          id: Faker.lorem.word(10),
+          cantidad: Number(Faker.finance.amount(1, 10, 0)),
+          idProducto: productId,
+          nombreProducto: product.name,
+        };
+        response = await sendRequest(payload);
+      });
+
+      it('should return 403', () => {
+        expect(response.statusCode).toBe(403);
+      });
+
+      it('should not increase inventory', async () => {
+        const inventoryAfter = await productMovementRepository.getInventory(
+          productId,
+        );
+        expect(inventoryAfter - inventoryBefore).toBe(0);
+      });
+    });
+
+    describe('when monthly purchase is more than 30 with incoming amount', () => {
+      beforeEach(async () => {
+        product = await factory(Product)().create();
+        productId = product.id;
+        await factory(ProductMovement)({
+          productId,
+          amount: Number(Faker.finance.amount(25, 30, 0)),
+        }).create();
+        inventoryBefore = await productMovementRepository.getInventory(
+          productId,
+        );
+        payload = {
+          id: Faker.lorem.word(10),
+          cantidad: Number(Faker.finance.amount(11, 20, 0)),
+          idProducto: productId,
+          nombreProducto: product.name,
+        };
+        response = await sendRequest(payload);
+      });
+
+      it('should return 403', () => {
+        expect(response.statusCode).toBe(403);
+      });
+
+      it('should not increase inventory', async () => {
+        const inventoryAfter = await productMovementRepository.getInventory(
+          productId,
+        );
+        expect(inventoryAfter - inventoryBefore).toBe(0);
       });
     });
   });
