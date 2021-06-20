@@ -13,5 +13,6 @@ define(ProductMovement, (faker: typeof Faker, properties = {}) => {
   if (!productMovement.productId) {
     productMovement.product = factory(Product)() as any;
   }
+
   return productMovement;
 });

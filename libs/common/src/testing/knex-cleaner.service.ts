@@ -5,9 +5,11 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class KnexCleanerService {
-  async cleanDB() {
+  knexInstance;
+
+  constructor() {
     const { host, port, username, password, database } = Configuration.api.db;
-    const knexInstance = Knex({
+    this.knexInstance = Knex({
       client: 'postgres',
       connection: {
         host,
@@ -17,7 +19,13 @@ export class KnexCleanerService {
         port,
       },
     });
-    await knexCleaner.clean(knexInstance);
-    await knexInstance.destroy();
+  }
+
+  async cleanDB() {
+    await knexCleaner.clean(this.knexInstance);
+  }
+
+  async closeKnex() {
+    await this.knexInstance.destroy();
   }
 }
