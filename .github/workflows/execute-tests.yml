@@ -3,8 +3,7 @@ on:
   push:
     tags:
       - '*'
-    branches:
-      - 'dev'
+    branches: ['dev']
 jobs:
   Execute-tests:
     runs-on: ubuntu-20.04
