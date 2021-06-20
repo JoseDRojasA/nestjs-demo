@@ -1,5 +1,6 @@
 export const Configuration = {
   api: {
+    port: parseInt(process.env.API_PORT || '3000'),
     db: {
       host: process.env.API_DB_HOST,
       port: parseInt(process.env.API_DB_PORT),

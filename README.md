@@ -4,6 +4,10 @@
 - ts-node v10.0.0
 - Docker 20.10.6
 
+# Documentation
+
+You can access to swagger documentation in the url: http://localhost:3000/api/
+
 # Setup
 1. Pull the repository
 2. Configure the database container running: `docker-compose up -d`
