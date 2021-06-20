@@ -6,4 +6,5 @@ COPY . .
 
 RUN yarn
 RUN yarn build
-CMD ["node", "dist/apps/product-movements/main.js"]
+
+CMD ["yarn", "start:prod"]
