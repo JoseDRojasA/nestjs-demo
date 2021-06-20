@@ -79,7 +79,7 @@ describe('ProductMovementsController (e2e)', () => {
     describe('when the product is already created', () => {
       let product: Product;
       beforeEach(async () => {
-        product = await factory(Product)().make();
+        product = await factory(Product)().create();
         payload = {
           id: Faker.lorem.word(10),
           cantidad: Number(Faker.finance.amount(1, 10, 0)),
