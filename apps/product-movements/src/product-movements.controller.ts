@@ -11,7 +11,7 @@ export class ProductMovementsController {
 
   @Get()
   @ApiOperation({
-    summary: 'Check if the service is still available',
+    summary: 'Checks if the service is still available',
   })
   @ApiResponse({ status: 200 })
   healthCheck(): void {
@@ -21,7 +21,7 @@ export class ProductMovementsController {
   @Post('/registrar-compra')
   @ApiOperation({
     summary:
-      'Create a purchase. If the product does not exist, It is created automatically',
+      'Creates a purchase. If the product does not exist, It is created automatically',
   })
   @ApiResponse({ status: 201, description: 'Purchase' })
   savePurchase(@Body() body: ProductMovementDTO): Promise<ProductMovementDTO> {
@@ -31,7 +31,7 @@ export class ProductMovementsController {
   @Post('/registrar-venta')
   @ApiOperation({
     summary:
-      'Create a sell. If the product does not exist, It is created automatically',
+      'Creates a sell. If the product does not exist, It is created automatically',
   })
   @ApiResponse({ status: 201, description: 'Sell' })
   saveSell(@Body() body: ProductMovementDTO): Promise<ProductMovementDTO> {
