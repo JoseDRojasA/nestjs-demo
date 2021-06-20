@@ -30,6 +30,13 @@ jobs:
     
       - name: Install dependencies
         run: yarn
+      
+      - name: Configure env file
+        run: |
+          cp .env.example .env
+          echo API_DB_PORT=${{ API_DB_PORT }} >> .env
+        env:
+          API_DB_PORT: ${{ job.services.postgres.ports[5432] }}
 
       - name: Execute migrations
         run: yarn migrate
