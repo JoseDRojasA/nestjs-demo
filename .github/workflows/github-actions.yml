@@ -2,7 +2,7 @@ name: Execute testing
 on: [push]
 jobs:
   Execute-tests:
-    runs-on: node:14.17.1-stretch
+    runs-on: ubuntu-20.04
   
     services:
       postgres:
@@ -20,6 +20,11 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
+
+      - name: Setup node 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
     
       - name: Install dependencies
         run: yarn
