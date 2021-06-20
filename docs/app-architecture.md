@@ -19,6 +19,7 @@ The app architecture is based on Nestjs repository pattern.
 - Nestjs (Expressjs)
 - Typeorm
 - Typeorm-seeding
+- Swagger
 - Postgres
 - Jest
 - Husky
