@@ -33,7 +33,7 @@ jobs:
       
       - name: Configure env file
         run: |
-          cp .env.example .env
+          grep -v '^API_DB_PORT' .env.example > .env
           echo API_DB_PORT=${{ env.API_DB_PORT }} >> .env
         env:
           API_DB_PORT: ${{ job.services.postgres.ports[5432] }}
