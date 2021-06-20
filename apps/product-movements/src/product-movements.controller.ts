@@ -1,8 +1,9 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ProductMovementDTO } from './dto/product-movement.dto';
 import { ProductMovementsService } from './product-movements.service';
 
+@ApiTags('product-movements')
 @Controller()
 export class ProductMovementsController {
   // eslint-disable-next-line no-unused-vars
