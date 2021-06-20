@@ -32,7 +32,9 @@ jobs:
         run: yarn
       
       - name: Configure env file
-        run: cp .env.example .env && echo API_DB_PORT=${{ API_DB_PORT }} >> .env
+        run: |
+          cp .env.example .env
+          echo API_DB_PORT=${{ env.API_DB_PORT }} >> .env
         env:
           API_DB_PORT: ${{ job.services.postgres.ports[5432] }}
 
