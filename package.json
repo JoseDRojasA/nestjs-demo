@@ -19,7 +19,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./apps/product-movements/test/jest-e2e.json --runInBand",
-    "pretty": "prettier --write --tab-width 2 \"src/**/*.ts\"",
+    "pretty": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "migrate": "ts-node --transpile-only ./node_modules/typeorm/cli.js migration:run"
   },
   "dependencies": {
@@ -101,8 +101,7 @@
   },
   "lint-staged": {
     "*.ts": [
-      "yarn pretty",
-      "git add"
+      "yarn lint"
     ]
   },
   "husky": {
